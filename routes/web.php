@@ -18,7 +18,11 @@ Route::get('/','App\Http\Controllers\PostsController@index');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// コメントアウトする
+// Route::get('/home', 'HomeController@index')->name('home');
+
+// このコードを追加する
+Route::get('/home', 'App\Http\Controllers\PostsController@index');
 
 //ユーザ編集画面
 Route::get('/users/edit', 'App\Http\Controllers\UsersController@edit');
@@ -27,3 +31,12 @@ Route::post('/users/update', 'App\Http\Controllers\UsersController@update');
 
 // ユーザ詳細画面
 Route::get('/users/{user_id}', 'App\Http\Controllers\UsersController@show');
+
+// 投稿新規画面
+Route::get('/posts/new', 'App\Http\Controllers\PostsController@new')->name('new');
+
+// 投稿新規処理
+Route::post('/posts','App\Http\Controllers\PostsController@store');
+
+//投稿削除処理
+Route::get('/postsdelete/{post_id}', 'App\Http\Controllers\PostsController@destroy');
