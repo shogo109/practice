@@ -36,9 +36,13 @@ class User extends Authenticatable
     //hasMany設定
     public function posts()
     {
-        return $this->hasMany('App\Post');
+        return $this->hasMany('App\Models\Post');
     }
-
+    //hasMany設定
+    public function likes()
+    {
+        return $this->hasMany('App\Models\Like');
+    }
     /**
      * The attributes that should be cast.
      *
