@@ -34,14 +34,19 @@ class User extends Authenticatable
     ];
 
     //hasMany設定
-    public function posts()
+    Public function posts()
     {
         return $this->hasMany('App\Models\Post');
     }
     //hasMany設定
-    public function likes()
+    Public function likes()
     {
         return $this->hasMany('App\Models\Like');
+    }
+    //hasMany設定
+    Public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
     }
     /**
      * The attributes that should be cast.
