@@ -13,11 +13,11 @@
           {{csrf_field()}} 
           <div class="form-group">
             <label for="user_profile_photo">プロフィール写真</label><br>
-                @if ($user->profile_photo)
-                    <p>
-                        <img src="{{ asset('storage/user_images/' . $user->profile_photo) }}" alt="avatar" />
-                    </p>
-                @endif
+              @if ($user->image)
+                <p>
+                  <img src="data:image/png;base64,{{ $user->image }}" alt="avatar" />
+                </p>
+              @endif
             <input type="file" name="user_profile_photo"  value="{{ old('user_profile_photo',$user->id) }}" accept="image/jpeg,image/gif,image/png" />
           </div>
 
