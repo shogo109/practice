@@ -25,6 +25,11 @@ class Post extends Model
   {
     return $this->hasMany('App\Models\Comment');
   }
+  //hasMany設定
+  public function tags()
+  {
+      return $this->hasMany('App\Models\tags');
+  }
     //　削除する必要あり？
     use HasFactory;
 }

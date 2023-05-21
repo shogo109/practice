@@ -20,10 +20,13 @@
               @endif
             </div>
             <div class="col pl-0">
-              <input class="form-control border-0" placeholder="キャプションを書く" type="text" name="caption" value="{{ old('list_name') }}"/>
+              <input class="form-control border-1" placeholder="例) #アカシア集成材" type="text" name="tags" value="{{ old('tag_name') }}"/>
             </div>
           </div>
-          <div class="mb-3">
+          <div>
+            <input class="form-control border-1" style="white-space: pre-wrap;" placeholder="キャプションを書く" type="text" name="caption" value="{{ old('list_name') }}"/>
+          </div>
+          <div class="mb-3 mt-3">
             <input type="file" name="photo" accept="image/jpeg,image/gif,image/png" />
           </div>
           <input type="submit" name="commit" value="投稿する" class="btn btn-primary" data-disable-with="投稿する" />
