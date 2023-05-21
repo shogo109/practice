@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\tags;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -40,6 +41,16 @@ class PostsController extends Controller
         {
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
+
+        preg_match_all('/#([a-zA-z0-9０-９ぁ-んァ-ヶ亜-熙]+)/u', $request->tags, $match);
+
+        $tags = [];
+        foreach ($match[1] as $tag) {
+            $record = tags::firstOrCreate(['tag_label' => $tag]); // firstOrCreateメソッドで、tags_tableのnameカラムに該当のない$tagは新規登録される。
+            array_push($tags, $record); // $recordを配列に追加します(=$tags)
+        };
+
+        
 
         // Postモデル作成
         $post = new Post;
