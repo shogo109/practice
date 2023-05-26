@@ -42,7 +42,7 @@ class PostsController extends Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
-        preg_match_all('/#([a-zA-z0-9０-９ぁ-んァ-ヶ亜-熙]+)/u', $request->tags, $match);
+        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶ\p{Han}]+)/u', $request->tags, $match);
 
         $tags = [];
         foreach ($match[1] as $tag) {
@@ -50,13 +50,27 @@ class PostsController extends Controller
             array_push($tags, $record); // $recordを配列に追加します(=$tags)
         };
 
-        
+
+        $post_tags = [];
+        $items = tags::all();
+        foreach($items as $item) {
+            preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶ\p{Han}]+)/u', $request->tags, $match);
+            foreach ($match[1] as $tag) {
+                if($item->tag_label === $tag) {
+                    array_push($post_tags,$item->id);
+                }
+            }
+        }
 
         // Postモデル作成
         $post = new Post;
         $post->caption = $request->caption;
         $post->user_id = Auth::user()->id;
         $post->image = base64_encode(file_get_contents($request->photo));
+        for($i = 0; $i < count($post_tags); $i++) {
+            $columnName = 'tagId_' . ($i + 1);
+            $post->$columnName = $post_tags[$i];
+        }
         $post->save();
         
         // $request->photo->storeAs('public/post_images', $post->id . '.jpg');
