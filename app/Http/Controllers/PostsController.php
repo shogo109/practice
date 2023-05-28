@@ -52,12 +52,14 @@ class PostsController extends Controller
 
 
         $post_tags = [];
+        $post_tagLsbels = [];
         $items = tags::all();
         foreach($items as $item) {
             preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶ\p{Han}]+)/u', $request->tags, $match);
             foreach ($match[1] as $tag) {
                 if($item->tag_label === $tag) {
                     array_push($post_tags,$item->id);
+                    array_push($post_tagLsbels,$item->tag_label);
                 }
             }
         }
@@ -70,7 +72,9 @@ class PostsController extends Controller
         for($i = 0; $i < count($post_tags); $i++) {
             $columnName = 'tagId_' . ($i + 1);
             $post->$columnName = $post_tags[$i];
-        }
+            $columnLabelName = 'tagLabel_' . ($i + 1);
+            $post->$columnLabelName = $post_tagLsbels[$i];
+        } 
         $post->save();
         
         // $request->photo->storeAs('public/post_images', $post->id . '.jpg');
