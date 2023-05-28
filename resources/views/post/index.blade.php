@@ -30,7 +30,24 @@
           <img src="data:image/png;base64,{{ $post->image }}" class="card-img-top" />
         </a>
 
-        <div class="card-body">
+        <div class="card-body"> 
+          <div class="d-flex">
+            @if(!empty($post->tagLabel_1))
+              @for($i = 1; $i <= 5; $i++)
+                @php
+                  $columnName = 'tagLabel_' . $i;
+                  $tagValue = $post->$columnName;
+                @endphp
+                @if(!empty($tagValue))
+                  <p class="text-primary mb-0">#{{$tagValue}}</p>
+                @else
+                  <?php break; ?>
+                @endif
+              @endfor
+            @else
+              <p class="text-secondary mb-0">タグが保存されてません</p>
+            @endif
+          </div>
           <div class="row parts">
             <div id="like-icon-post-{{ $post->id }}">
               @if ($post->likedBy(Auth::user())->count() > 0)
