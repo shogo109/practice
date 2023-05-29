@@ -52,3 +52,9 @@ Route::post('/posts/{comment_id}/comments','App\Http\Controllers\CommentsControl
 
 //コメント取消処理
 Route::get('/comments/{comment_id}','App\Http\Controllers\CommentsController@destroy');
+
+// 検索画面
+Route::get('/posts/search', 'App\Http\Controllers\PostsController@search')->name('search');
+
+// 検索処理
+Route::post('/posts/filter','App\Http\Controllers\PostsController@store2');
