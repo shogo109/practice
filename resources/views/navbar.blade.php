@@ -8,6 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-md-auto align-items-center">
             <li>
+              <a class="btn btn-primary" href="/posts/search">検索</a>
               <a class="btn btn-primary" href="/posts/new">投稿</a>
             </li>
             <li>
