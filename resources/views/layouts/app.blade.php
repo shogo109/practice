@@ -20,7 +20,7 @@
   <body>
     @yield('navbar')
 
-    <div class="container">
+    <div class="my-container">
          @yield('content')
     </div>
 

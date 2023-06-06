@@ -1,0 +1,15 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 99;
+
+    background-color: #ffff;
+    height: 70px;
+    &-nav {
+        color: black;
+    }
+}
+.item-icons {
+    margin-top: 20px;
+}

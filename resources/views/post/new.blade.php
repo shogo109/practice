@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('footer')
 @section('content')
 <div class="panel-body">
 <!-- バリデーションエラーの場合に表示 --> 
