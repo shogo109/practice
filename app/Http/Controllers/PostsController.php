@@ -99,7 +99,7 @@ class PostsController extends Controller
         // Postモデル作成
         $post = new Post;
 
-        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー\p{Han}-]+)/u', $request->tags, $match);
+        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー\p{Han}-]+)/u', $request->searchTags, $match);
         $search_postId = [];
         $match_tags = [];
         $filter_post = [];
@@ -113,7 +113,7 @@ class PostsController extends Controller
         }
         $filter_post = $post;
         foreach ($match_tags as $tag) {
-            for ($i = 0; $i < count($match_tags); $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $columnName = 'tagId_' . ($i + 1);
                 $filter_post = $filter_post->orWhere(function ($query) use ($columnName, $tag) {
                 $query->where($columnName, '=', $tag);

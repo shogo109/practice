@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@include('footer')
 
 @section('content')
 <div class="main">
