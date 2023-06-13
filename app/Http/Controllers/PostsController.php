@@ -7,6 +7,7 @@ use App\Models\tags;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Google\Cloud\Firestore\FirestoreClient;
 
 class PostsController extends Controller
 {
