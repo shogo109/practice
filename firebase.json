@@ -13,22 +13,3 @@
     "rewrites": [
       {
         "source": "**",
-        "function": "home"
-      }
-    ]
-  },
-  "headers": [
-    {
-      "source": "/home/**",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    }
-  ],
-  "storage": {
-    "rules": "storage.rules"
-  }
-}
