@@ -13,11 +13,3 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.php"
-      }
-    ]
-  },
-  "storage": {
-    "rules": "storage.rules"
-  }
-}
