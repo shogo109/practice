@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "diy-creator-s",
+    "diy": "diy-creator-s"
+  },
+  "targets": {},
+  "etags": {}
+}
