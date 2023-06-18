@@ -58,6 +58,3 @@ Route::get('/posts/search', 'App\Http\Controllers\PostsController@search')->name
 
 // 検索処理
 Route::post('/posts/filter','App\Http\Controllers\PostsController@store2');
-
-
-Route::get('firebase', 'App\Http\Controllers\FirebaseController@index');

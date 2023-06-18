@@ -7,7 +7,6 @@ use App\Models\tags;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Google\Cloud\Firestore\FirestoreClient;
 
 class PostsController extends Controller
 {
@@ -16,15 +15,6 @@ class PostsController extends Controller
     {
         // ログインしていなかったらログインページに遷移する（この処理を消すとログインしなくてもページを表示する）
         $this->middleware('auth');
-    }
-    public function home()
-    {
-        $posts = Post::limit(10)
-            ->orderBy('created_at', 'desc')
-            ->get();
-            
-        // テンプレート「post/index.blade.php」を表示します。
-        return view('post/index', ['posts' => $posts]);
     }
     public function index()
     {
