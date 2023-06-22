@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('tag_label');
-            $table->integer('total');
+            $table->integer('total')->default(0);;
             $table->timestamps();
         });
     }
