@@ -1,10 +1,11 @@
 .navbar {
     background-color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, .0975);
-    height: 77px;
+    height:  55px;
     &__brand {
-      height: 65px;
-      width: 210px;
+      display: inline-block;
+      height: 100%;
+      width: 220px;
       background-size: 220px;
     }
     &__mainLogo {
@@ -29,4 +30,5 @@
       }
     }
   }
+
   

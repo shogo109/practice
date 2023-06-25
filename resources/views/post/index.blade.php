@@ -31,7 +31,7 @@
         </a>
 
         <div class="card-body"> 
-          <div class="d-flex">
+          <div class="d-flex flex-wrap">
             @if(!empty($post->tagLabel_1))
               @for($i = 1; $i <= 5; $i++)
                 @php
