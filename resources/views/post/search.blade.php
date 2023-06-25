@@ -16,7 +16,9 @@
         {{csrf_field()}} 
           <div class="form-group row mt-2">
             <div class="col-auto pr-0">
-              <img class="post-profile-icon round-img" src="{{ asset('storage/user_images/' . Auth::user()->id . '.jpg') }}"/>
+            @if (Auth::user()->image)
+              <img class="post-profile-icon round-img" src="data:image/png;base64,{{ Auth::user()->image }}"/>
+            @endif
             </div>
             <div class="col pl-0">
               <input class="form-control border-0" placeholder="検索したいタブを書く。例)#アカシア集成材#ツーバイフォー" type="text" name="searchTags" value="{{ old('list_name') }}"/>
