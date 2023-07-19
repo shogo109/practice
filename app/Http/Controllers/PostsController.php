@@ -7,6 +7,7 @@ use App\Models\tags;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
 {
@@ -97,32 +98,51 @@ class PostsController extends Controller
     public function store2(Request $request)
     {
         // Postモデル作成
-        $post = new Post;
-
-        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー\p{Han}-]+)/u', $request->searchTags, $match);
         $search_postId = [];
         $match_tags = [];
         $filter_post = [];
+
+        $pattern = '/[#＃]([a-zA-Z0-9０-９ぁ-んァ-ヶー\p{Han}-]+)/u';
+        preg_match_all($pattern, $request->searchTags, $match);
         $items = tags::all();
         foreach($items as $item) {
             foreach ($match[1] as $tag) {
-                if($item->tag_label === $tag) {
+                if(strpos($item->tag_label,$tag) !== false) { //tagテーブルから検索した文字のタグ名があるかを判断
                     array_push($match_tags,$item->id);
                 }
             }
         }
-        $filter_post = $post;
-        foreach ($match_tags as $tag) {
-            for ($i = 0; $i < 5; $i++) {
-                $columnName = 'tagId_' . ($i + 1);
-                $filter_post = $filter_post->orWhere(function ($query) use ($columnName, $tag) {
-                $query->where($columnName, '=', $tag);
+
+        $foundMatch = false;
+
+        $filteredPosts = Post::query();
+        
+        if(!empty($match_tags)) {
+            foreach ($match_tags as $tag) {
+                $filteredPosts->where(function ($query) use ($tag) {
+                    $query->where('tagId_1', '=', $tag)
+                        ->orWhere('tagId_2', '=', $tag)
+                        ->orWhere('tagId_3', '=', $tag)
+                        ->orWhere('tagId_4', '=', $tag)
+                        ->orWhere('tagId_5', '=', $tag);
                 });
             }
-        }       
-        $filteredPosts = $filter_post->get();
+            $results = $filteredPosts->get();
+        }
 
-        return view('/post/filter',compact('filteredPosts'));
+        // dd($results);
+        if(isset($results)) {
+            $foundMatch = true;
+        }
+
+        // マッチが見つからなかった場合にエラーメッセージをフラッシュデータとしてセッションに保存
+        if (!$foundMatch) {
+            $error_message = '該当する投稿が見つかりませんでした。';
+            return view('/post/filter',compact('error_message'));
+        } else {
+            return view('/post/filter',compact('results'));
+        }       
+
     }
 
     // }
