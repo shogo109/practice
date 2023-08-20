@@ -5,6 +5,7 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@jridgewell/sourcemap-codec": "^1.4.15",
         "@popperjs/core": "^2.11.6",
         "@vitejs/plugin-vue": "^4.0.0",
         "axios": "^1.1.2",
@@ -14,6 +15,7 @@
         "postcss": "^8.1.14",
         "sass": "^1.56.1",
         "vite": "^4.0.0",
+        "vite-plugin-pwa": "^0.16.4",
         "vue": "^3.2.37"
     }
 }
