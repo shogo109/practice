@@ -17,7 +17,7 @@
     <!-- <link href="{{ asset('css/application.css') }}" rel="stylesheet"> -->
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 
-    <script src="/registerSW.js"></script>
+   
   </head>
 
   <body>
@@ -29,5 +29,10 @@
 
     @yield('footer')
 
+    <!-- <div class="overlay" id="js-overlay"></div>
+
+    <button class="add-button">ホーム画面に追加</button> -->
+    
+    <script src="/registerSW.js"></script>
   </body>
 </html>
