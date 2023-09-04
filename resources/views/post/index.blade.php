@@ -8,6 +8,7 @@
     <div class="card-wrap">
       <div class="card">
         <div class="card-header align-items-center d-flex">
+          <!-- ユーザー部分の表示 -->
           <a class="no-text-decoration" href="/users/{{ $post->user->id }}">
             @if ($post->user->image)
                 <img class="post-profile-icon round-img" src="data:image/png;base64,{{ $post->user->image }}"/>
@@ -26,10 +27,12 @@
           @endif
         </div>
 
+        <!-- 写真の表示 -->
         <a href="/users/{{ $post->user->id }}">
-          <img src="data:image/png;base64,{{ $post->image }}" class="card-img-top" />
+          <img src="{{ asset('storage/post_images' . $post->image) }}" class="card-img-top" />
         </a>
 
+        <!-- タグの表示 -->
         <div class="card-body"> 
           <div class="d-flex flex-wrap">
             @if(!empty($post->tagLabel_1))
