@@ -54,9 +54,9 @@
           <div class="row parts">
             <div id="like-icon-post-{{ $post->id }}">
               @if ($post->likedBy(Auth::user())->count() > 0)
-                <a class="loved hide-text" data-remote="true" rel="nofollow" data-method="DELETE" href="/likes/{{ $post->likedBy(Auth::user())->firstOrFail()->id }}">いいねを取り消す</a>
+                <a id="loved" class="loved love hide-text" data-name="{{$post->id}}" data-remote="true" rel="nofollow" data-method="POST">いいねを取り消す</a>
               @else
-                <a class="love hide-text" data-remote="true" rel="nofollow" data-method="POST" href="/posts/{{ $post->id }}/likes">いいね</a>
+                <a id="love" class="love hide-text" data-name="{{$post->id}}" data-remote="true" rel="nofollow" data-method="POST">いいね</a>
               @endif
             </div>
             <a class="comment" href="#"></a>
@@ -86,4 +86,10 @@
     </div>
   </div>
 @endforeach
+@endsection
+
+
+
+@section('scripts')
+  @vite(['resources/js/asyncs/likeAsync.js'])
 @endsection
