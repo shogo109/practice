@@ -42,7 +42,7 @@ Route::post('/posts','App\Http\Controllers\PostsController@store');
 Route::get('/postsdelete/{post_id}', 'App\Http\Controllers\PostsController@destroy');
 
 //いいね処理
-Route::get('/posts/{post_id}/likes', 'App\Http\Controllers\LikesController@store');
+Route::post('/posts/{post_id}/likes', 'App\Http\Controllers\LikesController@store');
 
 //いいね取消処理
 Route::get('/likes/{like_id}', 'App\Http\Controllers\LikesController@destroy');
