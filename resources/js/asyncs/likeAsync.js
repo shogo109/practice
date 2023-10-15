@@ -1,19 +1,12 @@
-// function load() {
-//     console.log("呼び込み");
-// }
 
-// load();
 //いいねボタンの要素取得
-const likeButton = document.querySelector('.love');
-const unLikeButton = document.querySelector('.loved');
+const likeButton = document.getElementById('love'); //初期表示にいいねされていない要素の取得
+const unLikeButton = document.getElementById('loved'); //初期表示にすでにいいねされている要素の取得
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-//postidを取得する
-const postId = likeButton.getAttribute('data-name');
-// console.log(love);
 
 //非同期処理
-function fetchFunc(className) {
+function fetchFunc(postId) {
     fetch(`/posts/${postId}/likes`, {
         method: 'POST',
         headers: {
@@ -23,17 +16,12 @@ function fetchFunc(className) {
         body: '',
     })
     .then(data => {
+        console.log(`${postId}の取得に成功しました`);
         console.log(data);
-        if (className === "love") {
-            likeButton.classList.toggle("loved");
-            console.log(className);
-        } else if (className === "loved") {
-            unLikeButton.classList.toggle("loved");
-            console.log(className);
-        }
     })
     .catch(error => {
         console.error('Fetch error:', error);
+        alert("失敗しました。");
     });
 }
 
@@ -41,14 +29,28 @@ function fetchFunc(className) {
 likeButton.addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetchFunc("love");
+    likeButton.querySelector(".likeButton").classList.toggle("clicked");
+
+    //postidを取得する
+    const postId = likeButton.getAttribute('data-name');
+    fetchFunc(postId);
     
 })
 //いいね解除
 unLikeButton.addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetchFunc("loved");
+    const likesvg = unLikeButton.querySelector(".likeButton"); //aタグlovedidの子要素を取得
+    const likesvgLoved = likesvg.querySelector(".loved"); //likesvgの子要素を取得
+    if (likesvgLoved) { //初期表示にハートを赤くするための条件処理
+        likesvgLoved.classList.remove("loved"); //初回ハート解除する時は、クラスを排除する
+        likesvgLoved.classList.add("heart");
+    } else {
+        likesvg.classList.toggle("clicked"); //それ以降はトグルさせる
+    }
+
+    const lovedPostId = unLikeButton.getAttribute('data-name');
+    fetchFunc(lovedPostId);
     
 })
 
