@@ -51,6 +51,7 @@
               <p class="text-secondary mb-0">タグが保存されてません</p>
             @endif
           </div>
+          <!-- いいね表示 -->
           <div class="row parts">
             <div id="like-icon-post-{{ $post->id }}">
               @if ($post->likedBy(Auth::user())->count() > 0)
@@ -101,6 +102,7 @@
                 </a>
               @endif
             </div>
+            <!-- コメント表示 -->
             <a class="comment" href="#"></a>
           </div>
           <div id="like-text-post-{{ $post->id }}">

@@ -34,10 +34,12 @@
               @endif
             </div>
             
+            <!-- 写真の表示 -->
             <a href="/users/{{ $post->user->id }}">
-              <img src="data:image/png;base64,{{ $post->image }}" class="card-img-top" />
+              <img src="{{ asset('storage/post_images' . $post->image) }}" class="card-img-top" />
             </a>
             
+            <!-- タグの表示 -->
             <div class="card-body"> 
               <div class="d-flex">
                 @if(!empty($post->tagLabel_1))
@@ -56,14 +58,58 @@
                 <p class="text-secondary mb-0">タグが保存されてません</p>
                 @endif
               </div>
+              <!-- いいね表示 -->
               <div class="row parts">
                 <div id="like-icon-post-{{ $post->id }}">
                   @if ($post->likedBy(Auth::user())->count() > 0)
-                  <a class="loved hide-text" data-remote="true" rel="nofollow" data-method="DELETE" href="/likes/{{ $post->likedBy(Auth::user())->firstOrFail()->id }}">いいねを取り消す</a>
+                    <a id="loved" class="loved hide-text custom-heart" data-name="{{$post->id}}" data-remote="true" rel="nofollow" data-method="POST">
+                      <svg class="likeButton " width="40px" height="40px" viewBox="0 0 500 500">
+                        <circle class="explosion" r="150" cx="250" cy="250"></circle>
+                        <g class="particleLayer">
+                          <circle fill="#8CE8C3" cx="130" cy="126.5" r="12.5"/>
+                          <circle fill="#8CE8C3" cx="411" cy="313.5" r="12.5"/>
+                          <circle fill="#91D2FA" cx="279" cy="86.5" r="12.5"/>
+                          <circle fill="#91D2FA" cx="155" cy="390.5" r="12.5"/>
+                          <circle fill="#CC8EF5" cx="89" cy="292.5" r="10.5"/>
+                          <circle fill="#9BDFBA" cx="414" cy="282.5" r="10.5"/>
+                          <circle fill="#9BDFBA" cx="115" cy="149.5" r="10.5"/>
+                          <circle fill="#9FC7FA" cx="250" cy="80.5" r="10.5"/>
+                          <circle fill="#9FC7FA" cx="78" cy="261.5" r="10.5"/>
+                          <circle fill="#96D8E9" cx="182" cy="402.5" r="10.5"/>
+                          <circle fill="#CC8EF5" cx="401.5" cy="166" r="13"/>
+                          <circle fill="#DB92D0" cx="379" cy="141.5" r="10.5"/>
+                          <circle fill="#DB92D0" cx="327" cy="397.5" r="10.5"/>
+                          <circle fill="#DD99B8" cx="296" cy="392.5" r="10.5"/>
+                        </g>
+                        <path class="loved" d="M250,187.4c-31.8-47.8-95.5-19.8-95.5,32.2c0,35.2,31.8,60.3,55.7,79.2c24.9,19.7,31.8,23.9,39.8,31.8 c7.9-7.9,14.6-12.6,39.8-31.8c24.3-18.5,55.7-44.4,55.7-79.6C345.5,167.6,281.8,139.7,250,187.4z"/>
+                      </svg>
+                    </a>
                   @else
-                  <a class="love hide-text" data-remote="true" rel="nofollow" data-method="POST" href="/posts/{{ $post->id }}/likes">いいね</a>
+                    <a id="love" class="love hide-text custom-heart" data-name="{{$post->id}}" data-remote="true" rel="nofollow" data-method="POST">
+                      <svg class="likeButton" width="40px" height="40px" viewBox="0 0 500 500">
+                        <circle class="explosion" r="150" cx="250" cy="250"></circle>
+                        <g class="particleLayer">
+                          <circle fill="#8CE8C3" cx="130" cy="126.5" r="12.5"/>
+                          <circle fill="#8CE8C3" cx="411" cy="313.5" r="12.5"/>
+                          <circle fill="#91D2FA" cx="279" cy="86.5" r="12.5"/>
+                          <circle fill="#91D2FA" cx="155" cy="390.5" r="12.5"/>
+                          <circle fill="#CC8EF5" cx="89" cy="292.5" r="10.5"/>
+                          <circle fill="#9BDFBA" cx="414" cy="282.5" r="10.5"/>
+                          <circle fill="#9BDFBA" cx="115" cy="149.5" r="10.5"/>
+                          <circle fill="#9FC7FA" cx="250" cy="80.5" r="10.5"/>
+                          <circle fill="#9FC7FA" cx="78" cy="261.5" r="10.5"/>
+                          <circle fill="#96D8E9" cx="182" cy="402.5" r="10.5"/>
+                          <circle fill="#CC8EF5" cx="401.5" cy="166" r="13"/>
+                          <circle fill="#DB92D0" cx="379" cy="141.5" r="10.5"/>
+                          <circle fill="#DB92D0" cx="327" cy="397.5" r="10.5"/>
+                          <circle fill="#DD99B8" cx="296" cy="392.5" r="10.5"/>
+                        </g>
+                        <path class="heart" d="M250,187.4c-31.8-47.8-95.5-19.8-95.5,32.2c0,35.2,31.8,60.3,55.7,79.2c24.9,19.7,31.8,23.9,39.8,31.8 c7.9-7.9,14.6-12.6,39.8-31.8c24.3-18.5,55.7-44.4,55.7-79.6C345.5,167.6,281.8,139.7,250,187.4z"/>
+                      </svg>
+                    </a>
                   @endif
                 </div>
+                <!-- コメント表示 -->
                 <a class="comment" href="#"></a>
               </div>
               <div id="like-text-post-{{ $post->id }}">
@@ -94,4 +140,8 @@
     
     @endif
 
+@endsection
+
+@section('scripts')
+  @vite(['resources/js/asyncs/likeAsync.js'])
 @endsection
