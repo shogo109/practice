@@ -18,13 +18,25 @@ class LikesController extends Controller
     }
     public function store(Request $request)
     {
-        $like = new Like;
-        $like->post_id = $request->post_id;
-        $like->user_id = Auth::user()->id;
-        $like->save();
 
-        //「/」ルートにリダイレクト
-        return redirect('/');
+        $user_id = Auth::user()->id;
+        $post_id = $request->post_id;
+        $already_liked = Like::where('user_id',$user_id)->where('post_id',$post_id)->first();
+
+
+        if(!$already_liked) { //userがまだいいねしていなかった場合
+            $like = new Like;    
+            $like->post_id = $post_id;
+            $like->user_id = Auth::user()->id;
+            $like->save();
+            //「/」ルートにリダイレクト
+            return redirect('/');
+        } else { //もしいいねしていたら、DELETEする
+            Like::where('user_id',$user_id)->where('post_id',$post_id)->delete();
+            return redirect('/');
+        }
+
+
     }
     public function destroy(Request $request)
     {

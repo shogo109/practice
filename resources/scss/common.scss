@@ -4,3 +4,37 @@ body {
     color: #262626;
   }
   
+// body.hidden {
+//   overflow: hidden;
+// }
+
+// .add-button {
+//   border: white 1px solid;
+//   margin:10px;
+//   padding: 10px;
+//   position: absolute;
+//   top: 50%;
+//   transform: translate(-50%);
+//   left: 50%;
+//   color: white;
+//   background-color: transparent;
+//   display: none;
+//   z-index: 999;
+// }
+
+// .overlay {
+//   position: fixed;
+//   width: 100%;
+//   height: 100%;
+//   background: grey;
+//   opacity: .6;
+//   display: none; /** 追記 **/
+//   z-index: 998;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+// }
+
+// .overlay.is-active {
+//   display: block;
+// }

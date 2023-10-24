@@ -7,6 +7,8 @@ use App\Models\tags;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image as InterventionImage;
 
 class PostsController extends Controller
 {
@@ -60,14 +62,14 @@ class PostsController extends Controller
 
 
         $post_tags = [];
-        $post_tagLsbels = [];
+        $post_tagLabels = [];
         $items = tags::all();
         foreach($items as $item) {
             preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー\p{Han}-]+)/u', $request->tags, $match);
             foreach ($match[1] as $tag) {
                 if($item->tag_label === $tag) {
                     array_push($post_tags,$item->id);
-                    array_push($post_tagLsbels,$item->tag_label);
+                    array_push($post_tagLabels,$item->tag_label);
                 }
             }
         }
@@ -76,14 +78,37 @@ class PostsController extends Controller
         $post = new Post;
         $post->caption = $request->caption;
         $post->user_id = Auth::user()->id;
-        $post->image = base64_encode(file_get_contents($request->photo));
+        // $post->image = base64_encode(file_get_contents($request->photo));
         for($i = 0; $i < count($post_tags); $i++) {
             $columnName = 'tagId_' . ($i + 1);
             $post->$columnName = $post_tags[$i];
             $columnLabelName = 'tagLabel_' . ($i + 1);
-            $post->$columnLabelName = $post_tagLsbels[$i];
+            $post->$columnLabelName = $post_tagLabels[$i];
         } 
         $post->save();
+
+        //画像圧縮処理
+        if($request->photo !== null) {
+            $image = InterventionImage::make($request->photo);
+            $image->orientate();
+            $image->resize(
+                600,
+                null,
+                function($constraint) {
+                    // 縦横比を保持したままにする
+                    $constraint->aspectRatio();
+                    // 小さい画像は大きくしない
+                    $constraint->upsize();
+                }
+            );
+            $filePath = storage_path('app/public/post_images');
+            //最新のpost->idを取得する
+            $latestPost = Post::find($post->id);
+            $image->save($filePath . '/post_id' . $latestPost->id . '.jpg');
+            $imagePath = '/post_id' . $latestPost->id . '.jpg';
+            $latestPost->image = $imagePath;
+            $latestPost->save();
+        }
         
         // $request->photo->storeAs('public/post_images', $post->id . '.jpg');
         
@@ -97,32 +122,51 @@ class PostsController extends Controller
     public function store2(Request $request)
     {
         // Postモデル作成
-        $post = new Post;
-
-        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー\p{Han}-]+)/u', $request->searchTags, $match);
         $search_postId = [];
         $match_tags = [];
         $filter_post = [];
+
+        $pattern = '/[#＃]([a-zA-Z0-9０-９ぁ-んァ-ヶー\p{Han}-]+)/u';
+        preg_match_all($pattern, $request->searchTags, $match);
         $items = tags::all();
         foreach($items as $item) {
             foreach ($match[1] as $tag) {
-                if($item->tag_label === $tag) {
+                if(strpos($item->tag_label,$tag) !== false) { //tagテーブルから検索した文字のタグ名があるかを判断
                     array_push($match_tags,$item->id);
                 }
             }
         }
-        $filter_post = $post;
-        foreach ($match_tags as $tag) {
-            for ($i = 0; $i < 5; $i++) {
-                $columnName = 'tagId_' . ($i + 1);
-                $filter_post = $filter_post->orWhere(function ($query) use ($columnName, $tag) {
-                $query->where($columnName, '=', $tag);
+
+        $foundMatch = false;
+
+        $filteredPosts = Post::query();
+        
+        if(!empty($match_tags)) {
+            foreach ($match_tags as $tag) {
+                $filteredPosts->where(function ($query) use ($tag) {
+                    $query->where('tagId_1', '=', $tag)
+                        ->orWhere('tagId_2', '=', $tag)
+                        ->orWhere('tagId_3', '=', $tag)
+                        ->orWhere('tagId_4', '=', $tag)
+                        ->orWhere('tagId_5', '=', $tag);
                 });
             }
-        }       
-        $filteredPosts = $filter_post->get();
+            $results = $filteredPosts->get();
+        }
 
-        return view('/post/filter',compact('filteredPosts'));
+        // dd($results);
+        if(isset($results)) {
+            $foundMatch = true;
+        }
+
+        // マッチが見つからなかった場合にエラーメッセージをフラッシュデータとしてセッションに保存
+        if (!$foundMatch) {
+            $error_message = '該当する投稿が見つかりませんでした。';
+            return view('/post/filter',compact('error_message'));
+        } else {
+            return view('/post/filter',compact('results'));
+        }       
+
     }
 
     // }
@@ -133,3 +177,4 @@ class PostsController extends Controller
         return redirect('/');
     }
 }
+
